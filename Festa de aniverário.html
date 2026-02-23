@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Festa de Aniversário - Profª Adriana Bett Terebinto</title>
+    <style>
+        :root { --festa-primaria: #ff4081; --festa-secundaria: #7c4dff; --festa-fundo: #fff9c4; --sucesso: #4caf50; --perigo: #f44336; }
+        
+        body { font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif; background-color: var(--festa-fundo); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        
+        #game-container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 95%; max-width: 1100px; border: 4px solid var(--festa-primaria); position: relative; }
+        
+        .topo-festa { text-align: center; margin-bottom: 20px; }
+        .topo-festa h1 { color: var(--festa-primaria); margin: 0; font-size: 2.5em; text-shadow: 2px 2px #ffccbc; }
+
+        /* Checklist de Missões */
+        .missoes-festa { display: flex; justify-content: space-around; background: var(--festa-secundaria); color: white; padding: 15px; border-radius: 50px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); flex-wrap: wrap; gap: 10px; }
+        .item-missao { opacity: 0.5; transition: 0.5s; font-size: 1.1em; display: flex; align-items: center; gap: 8px; }
+        .item-missao.check { opacity: 1; color: #ccff90; font-weight: bold; transform: scale(1.05); }
+
+        /* Painel de Ações */
+        .painel-convite { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .bloco-acao { background: #fce4ec; border: 2px solid var(--festa-primaria); padding: 15px; border-radius: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .bloco-acao h3 { margin: 0; color: #ad1457; font-size: 1.2em; border-bottom: 1px solid #ff80ab; padding-bottom: 5px; }
+
+        input, select { padding: 12px; border-radius: 10px; border: 2px solid #ddd; outline: none; transition: 0.3s; font-family: sans-serif; }
+        input:focus { border-color: var(--festa-primaria); box-shadow: 0 0 5px rgba(255, 64, 129, 0.3); }
+
+        button { cursor: pointer; border: none; padding: 12px; border-radius: 10px; color: white; font-weight: bold; transition: 0.3s; font-size: 1em; text-transform: uppercase; }
+        .btn-add { background: var(--sucesso); }
+        .btn-sub { background: var(--festa-secundaria); }
+        .btn-rem { background: var(--perigo); }
+        
+        /* Botão de Concluir */
+        .btn-fim { background: #ff6f00; width: 100%; margin-top: 25px; font-size: 1.5em; display: none; padding: 20px; box-shadow: 0 5px 15px rgba(255, 111, 0, 0.4); animation: pulse 1.5s infinite; border-radius: 15px; }
+        
+        button:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        /* Lista Visual */
+        #lista-convidados { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 30px; background: #fffde7; border: 3px dashed #ffd54f; border-radius: 20px; min-height: 180px; }
+        .convidado-node { position: relative; }
+        .badge-indice { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--festa-primaria); color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 3px solid white; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        
+        .card-convidado { background: white; border: 3px solid #ff80ab; padding: 15px; border-radius: 20px; width: 110px; text-align: center; box-shadow: 0 8px 15px rgba(0,0,0,0.05); }
+        .avatar { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; border: 3px solid #f8bbd0; background: #eee; }
+        .nome-convidado { font-weight: bold; color: #333; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        #feedback { text-align: center; height: 30px; font-weight: bold; margin-bottom: 10px; font-size: 1.2em; }
+
+        /* Assinatura */
+        .assinatura { margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee; text-align: center; font-size: 0.9em; color: #666; font-family: sans-serif; }
+        .assinatura strong { color: var(--festa-primaria); }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        
+        /* Modal de Vitória */
+        .tela-sucesso { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; padding: 20px; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="topo-festa">
+        <h1>🎂 Festa de Aniversário!</h1>
+        <p>Aprenda a <strong>Manipular Listas</strong> organizando seus convidados.</p>
+    </div>
+
+    <div class="missoes-festa">
+        <div id="m-ins" class="item-missao">⬜ Convidar (Inserir)</div>
+        <div id="m-sub" class="item-missao">⬜ Trocar (Substituir)</div>
+        <div id="m-rem" class="item-missao">⬜ Desconvidar (Remover)</div>
+    </div>
+
+    <div id="feedback"></div>
+
+    <div class="painel-convite">
+        <div class="bloco-acao">
+            <h3>💌 CONVIDAR</h3>
+            <input type="text" id="ins-nome" placeholder="Nome do Convidado">
+            <select id="ins-gen">
+                <option value="m">Menino</option>
+                <option value="f">Menina</option>
+            </select>
+            <input type="number" id="ins-idx" placeholder="No Índice (Ex: 0)" min="0">
+            <button class="btn-add" onclick="processar('inserir')">Enviar Convite</button>
+        </div>
+
+        <div class="bloco-acao">
+            <h3>🔄 TROCAR</h3>
+            <input type="number" id="sub-idx" placeholder="Índice de quem sai" min="0">
+            <input type="text" id="sub-nome" placeholder="Quem entra no lugar?">
+            <button class="btn-sub" onclick="processar('substituir')">Substituir Convidado</button>
+        </div>
+
+        <div class="bloco-acao">
+            <h3>❌ DESCONVIDAR</h3>
+            <input type="number" id="rem-idx" placeholder="Qual Índice remover?" min="0">
+            <button class="btn-rem" onclick="processar('remover')">Remover da Lista</button>
+        </div>
+    </div>
+
+    <div id="lista-convidados"></div>
+
+    <button id="btn-concluir" class="btn-fim" onclick="abrirFesta()">🥳 TUDO PRONTO! COMEÇAR A FESTA!</button>
+
+    <div class="assinatura">
+        Atividade desenvolvida pela <strong>Professora Adriana Bett Terebinto</strong> • Pensamento Computacional
+    </div>
+</div>
+
+<div id="tela-vitoria" class="tela-sucesso">
+    <h1 style="font-size: 3.5em; margin: 0;">🎉 PARABÉNS! 🎉</h1>
+    <h2 style="font-weight: normal; max-width: 600px;">Você dominou a manipulação de listas!</h2>
+    <p>Atividade criada pela Profª Adriana Bett Terebinto</p>
+    <button onclick="location.reload()" style="background: var(--festa-primaria); padding: 20px 40px; font-size: 1.2em; border-radius: 50px; margin-top: 30px;">Reiniciar Atividade</button>
+</div>
+
+<script>
+    const avatares = {
+        m: ["https://cdn-icons-png.flaticon.com/512/163/163801.png", "https://cdn-icons-png.flaticon.com/512/4825/4825038.png", "https://cdn-icons-png.flaticon.com/512/4140/4140048.png"],
+        f: ["https://cdn-icons-png.flaticon.com/512/163/163807.png", "https://cdn-icons-png.flaticon.com/512/6997/6997662.png", "https://cdn-icons-png.flaticon.com/512/4140/4140047.png"]
+    };
+
+    let convidados = [
+        { nome: "Pedro", gen: "m" },
+        { nome: "Julia", gen: "f" }
+    ];
+
+    let testes = { ins: false, sub: false, rem: false };
+
+    function renderizar() {
+        const area = document.getElementById('lista-convidados');
+        area.innerHTML = '';
+        
+        convidados.forEach((c, i) => {
+            const foto = avatares[c.gen][c.nome.length % 3];
+            area.innerHTML += `
+                <div class="convidado-node">
+                    <div class="badge-indice">${i}</div>
+                    <div class="card-convidado">
+                        <img src="${foto}" class="avatar">
+                        <span class="nome-convidado">${c.nome}</span>
+                    </div>
+                </div>`;
+        });
+
+        if(testes.ins) { 
+            document.getElementById('m-ins').classList.add('check'); 
+            document.getElementById('m-ins').innerText = "✅ Convidou (Inserir)";
+        }
+        if(testes.sub) { 
+            document.getElementById('m-sub').classList.add('check'); 
+            document.getElementById('m-sub').innerText = "✅ Trocou (Substituir)";
+        }
+        if(testes.rem) { 
+            document.getElementById('m-rem').classList.add('check'); 
+            document.getElementById('m-rem').innerText = "✅ Desconvidou (Remover)";
+        }
+
+        if(testes.ins && testes.sub && testes.rem) {
+            document.getElementById('btn-concluir').style.display = 'block';
+        }
+    }
+
+    function processar(tipo) {
+        const f = document.getElementById('feedback');
+        
+        if (tipo === 'inserir') {
+            const nome = document.getElementById('ins-nome').value;
+            const gen = document.getElementById('ins-gen').value;
+            let idx = parseInt(document.getElementById('ins-idx').value);
+            
+            if(!nome) return;
+            if(isNaN(idx)) idx = convidados.length;
+            
+            convidados.splice(idx, 0, { nome: nome, gen: gen });
+            testes.ins = true;
+            f.innerText = `🎈 ${nome} foi convidado para a posição ${idx}!`;
+            f.style.color = "green";
+        } 
+        
+        else if (tipo === 'substituir') {
+            const idx = parseInt(document.getElementById('sub-idx').value);
+            const nome = document.getElementById('sub-nome').value;
+            
+            if(isNaN(idx) || idx >= convidados.length || !nome) {
+                f.innerText = "⚠️ Erro: Índice não existe ou nome vazio!";
+                f.style.color = "red";
+                return;
+            }
+            
+            const antigo = convidados[idx].nome;
+            convidados[idx].nome = nome;
+            testes.sub = true;
+            f.innerText = `🔄 Trocamos ${antigo} por ${nome}!`;
+            f.style.color = "blue";
+        }
+
+        else if (tipo === 'remover') {
+            const idx = parseInt(document.getElementById('rem-idx').value);
+            
+            if(isNaN(idx) || idx >= convidados.length) {
+                f.innerText = "⚠️ Erro: Não há ninguém nesse índice!";
+                f.style.color = "red";
+                return;
+            }
+            
+            const excluido = convidados.splice(idx, 1);
+            testes.rem = true;
+            f.innerText = `❌ ${excluido[0].nome} foi removido da lista.`;
+            f.style.color = "orange";
+        }
+
+        renderizar();
+        document.querySelectorAll('input').forEach(input => input.value = "");
+    }
+
+    function abrirFesta() {
+        document.getElementById('tela-vitoria').style.display = 'flex';
+    }
+
+    renderizar();
+</script>
+</body>
+</html>
