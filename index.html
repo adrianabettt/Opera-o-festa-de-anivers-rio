@@ -6,18 +6,16 @@
     <style>
         :root { --festa-primaria: #ff4081; --festa-secundaria: #7c4dff; --festa-fundo: #fff9c4; --sucesso: #4caf50; --perigo: #f44336; }
         
-        /* Ajuste para ocupar a tela sem rolar */
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif; 
+            font-family: 'Arial', sans-serif; 
             background-color: var(--festa-fundo); 
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            height: 100vh; /* Altura total da tela */
-            margin: 0; 
-            padding: 10px;
-            overflow: hidden; /* Evita rolagem */
+            height: 100vh; 
+            overflow: hidden; 
+            text-transform: uppercase; 
         }
         
         #game-container { 
@@ -25,156 +23,145 @@
             padding: 15px; 
             border-radius: 20px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-            width: 100%; 
-            max-width: 1000px; 
-            max-height: 98vh; 
-            border: 4px solid var(--festa-primaria); 
+            width: 95%; 
+            max-width: 900px; 
+            height: 90vh; 
+            border: 0.8vh solid var(--festa-primaria); 
             display: flex;
             flex-direction: column;
         }
         
         .topo-festa { text-align: center; margin-bottom: 10px; }
-        .topo-festa h1 { color: var(--festa-primaria); margin: 0; font-size: 1.8em; }
-        .topo-festa p { margin: 2px; font-size: 0.9em; }
+        .topo-festa h1 { color: var(--festa-primaria); font-size: 3vh; }
 
         .missoes-festa { 
             display: flex; 
             justify-content: space-around; 
             background: var(--festa-secundaria); 
-            color: white; 
-            padding: 8px; 
-            border-radius: 50px; 
-            margin-bottom: 15px; 
-            font-size: 0.9em;
+            color: white; padding: 1vh; border-radius: 50px; margin-bottom: 1vh; font-size: 1.5vh;
         }
-        .item-missao { opacity: 0.5; transition: 0.5s; display: flex; align-items: center; gap: 5px; }
+        .item-missao { opacity: 0.5; transition: 0.5s; }
         .item-missao.check { opacity: 1; color: #ccff90; font-weight: bold; }
 
         .painel-convite { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 10px; 
-            margin-bottom: 15px; 
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1vh; 
         }
         .bloco-acao { 
-            background: #fce4ec; 
-            border: 2px solid var(--festa-primaria); 
-            padding: 10px; 
-            border-radius: 12px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 8px; 
+            background: #fce4ec; border: 2px solid var(--festa-primaria); 
+            padding: 1vh; border-radius: 12px; display: flex; flex-direction: column; gap: 5px; 
         }
-        .bloco-acao h3 { margin: 0; color: #ad1457; font-size: 1em; text-align: center; }
+        .bloco-acao h3 { font-size: 1.6vh; color: #ad1457; text-align: center; }
 
-        input, select { padding: 8px; border-radius: 8px; border: 1px solid #ddd; font-size: 0.85em; }
+        input, select { padding: 8px; border-radius: 8px; border: 1px solid #ddd; font-size: 1.4vh; }
 
-        button { cursor: pointer; border: none; padding: 8px; border-radius: 8px; color: white; font-weight: bold; font-size: 0.85em; text-transform: uppercase; }
+        button { cursor: pointer; border: none; padding: 1vh; border-radius: 8px; color: white; font-weight: bold; font-size: 1.4vh; }
         .btn-add { background: var(--sucesso); }
         .btn-sub { background: var(--festa-secundaria); }
         .btn-rem { background: var(--perigo); }
         
         .btn-fim { 
-            background: #ff6f00; 
-            width: 100%; 
-            margin-top: 10px; 
-            font-size: 1.2em; 
-            display: none; 
-            padding: 12px; 
-            border-radius: 12px;
-            animation: pulse 1.5s infinite;
+            background: #ff6f00; width: 100%; margin-top: 10px; font-size: 2vh; 
+            display: none; padding: 1.5vh; border-radius: 12px; animation: pulse 1.5s infinite;
         }
 
-        /* Área da lista com scroll interno se necessário */
         #lista-convidados { 
-            display: flex; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-            gap: 15px; 
-            padding: 15px; 
-            background: #fffde7; 
-            border: 2px dashed #ffd54f; 
-            border-radius: 15px; 
-            flex-grow: 1; 
-            overflow-y: auto; 
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; 
+            padding: 1vh; background: #fffde7; border: 2px dashed #ffd54f; 
+            border-radius: 15px; flex-grow: 1; overflow-y: auto; 
         }
         
         .convidado-node { position: relative; margin-top: 10px; }
         .badge-indice { 
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%); 
+            position: absolute; top: -8px; left: 50%; transform: translateX(-50%); 
             background: var(--festa-primaria); color: white; border-radius: 50%; 
-            width: 24px; height: 24px; display: flex; align-items: center; 
-            justify-content: center; font-weight: bold; font-size: 0.8em; border: 2px solid white; z-index: 2; 
+            width: 20px; height: 20px; display: flex; align-items: center; 
+            justify-content: center; font-weight: bold; font-size: 12px; border: 2px solid white; z-index: 2; 
         }
         
-        .card-convidado { background: white; border: 2px solid #ff80ab; padding: 8px; border-radius: 15px; width: 85px; text-align: center; }
-        .avatar { width: 50px; height: 50px; border-radius: 50%; margin-bottom: 5px; background: #eee; }
-        .nome-convidado { font-weight: bold; color: #333; font-size: 0.8em; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-convidado { background: white; border: 2px solid #ff80ab; padding: 5px; border-radius: 15px; width: 70px; text-align: center; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; }
+        .nome-convidado { font-weight: bold; font-size: 10px; display: block; overflow: hidden; }
 
-        #feedback { text-align: center; height: 20px; font-weight: bold; margin-bottom: 5px; font-size: 1em; }
+        /* FASE 2: QUESTÕES */
+        #fase-questoes { display: none; flex-direction: column; gap: 2vh; padding: 2vh; overflow-y: auto;}
+        .questao-box { background: #f3e5f5; padding: 2vh; border-radius: 15px; text-align: left; border-left: 5px solid var(--festa-secundaria); }
+        .opcoes-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1vh; }
+        .opcao-btn { background: white; color: #333; border: 2px solid var(--festa-secundaria); padding: 1vh; border-radius: 10px; cursor: pointer; font-size: 1.4vh; }
+        .opcao-btn.selected { background: var(--festa-secundaria); color: white; }
 
-        .assinatura { margin-top: 10px; font-size: 0.75em; color: #666; text-align: center; }
+        /* MODAL FINAL */
+        #modal-resultado {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background: white; padding: 4vh; border-radius: 30px; border: 1vh solid var(--festa-primaria);
+            text-align: center; width: 90%; max-width: 500px;
+            animation: surge 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes surge { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.01); } 100% { transform: scale(1); } }
+        .nota-box { font-size: 10vh; font-weight: bold; color: var(--festa-primaria); margin: 2vh 0; }
         
-        .tela-sucesso { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
 <div id="game-container">
-    <div class="topo-festa">
-        <h1>🎂 Festa de Aniversário!</h1>
-        <p>Aprenda a <strong>Manipular Listas</strong> Organizando seus convidados.</p>
-    </div>
-
-    <div class="missoes-festa">
-        <div id="m-ins" class="item-missao">⬜ Convidar</div>
-        <div id="m-sub" class="item-missao">⬜ Trocar</div>
-        <div id="m-rem" class="item-missao">⬜ Remover</div>
-    </div>
-
-    <div id="feedback"></div>
-
-    <div class="painel-convite">
-        <div class="bloco-acao">
-            <h3>💌 CONVIDAR</h3>
-            <input type="text" id="ins-nome" placeholder="Nome">
-            <select id="ins-gen">
-                <option value="m">Menino</option>
-                <option value="f">Menina</option>
-            </select>
-            <input type="number" id="ins-idx" placeholder="No Índice" min="0">
-            <button class="btn-add" onclick="processar('inserir')">Convidar</button>
+    <div id="fase-pratica" style="display: flex; flex-direction: column; height: 100%;">
+        <div class="topo-festa">
+            <h1>🎂 Festa de Aniversário!</h1>
+            <p style="font-size: 1.5vh;">Fase 1: Manipulação de Listas</p>
         </div>
 
-        <div class="bloco-acao">
-            <h3>🔄 TROCAR</h3>
-            <input type="number" id="sub-idx" placeholder="Índice sai" min="0">
-            <input type="text" id="sub-nome" placeholder="Quem entra?">
-            <button class="btn-sub" onclick="processar('substituir')">Substituir</button>
+        <div class="missoes-festa">
+            <div id="m-ins" class="item-missao">⬜ Convidar</div>
+            <div id="m-sub" class="item-missao">⬜ Trocar</div>
+            <div id="m-rem" class="item-missao">⬜ Remover</div>
         </div>
 
-        <div class="bloco-acao">
-            <h3>❌ REMOVER</h3>
-            <input type="number" id="rem-idx" placeholder="Qual Índice?" min="0">
-            <button class="btn-rem" onclick="processar('remover')">Remover</button>
+        <div class="painel-convite">
+            <div class="bloco-acao">
+                <h3>💌 CONVIDAR</h3>
+                <input type="text" id="ins-nome" placeholder="Nome">
+                <select id="ins-gen"><option value="m">Menino</option><option value="f">Menina</option></select>
+                <input type="number" id="ins-idx" placeholder="Índice" min="0">
+                <button class="btn-add" onclick="processar('inserir')">Adicionar</button>
+            </div>
+            <div class="bloco-acao">
+                <h3>🔄 TROCAR</h3>
+                <input type="number" id="sub-idx" placeholder="Índice" min="0">
+                <input type="text" id="sub-nome" placeholder="Nome">
+                <button class="btn-sub" onclick="processar('substituir')">Substituir</button>
+            </div>
+            <div class="bloco-acao">
+                <h3>❌ REMOVER</h3>
+                <input type="number" id="rem-idx" placeholder="Índice" min="0">
+                <button class="btn-rem" onclick="processar('remover')">Excluir</button>
+            </div>
         </div>
+
+        <div id="lista-convidados"></div>
+        <button id="btn-ir-questoes" class="btn-fim" onclick="mudarParaQuestoes()">🥳 IR PARA O DESAFIO FINAL</button>
     </div>
 
-    <div id="lista-convidados"></div>
-
-    <button id="btn-concluir" class="btn-fim" onclick="abrirFesta()">🥳 FINALIZAR ATIVIDADE</button>
-
-    <div class="assinatura">
-        <strong>By Profª Adriana Bett Terebinto</strong> 
+    <div id="fase-questoes">
+        <h2 style="color: var(--festa-secundaria);">🧠 DESAFIO DE CONHECIMENTO</h2>
+        <p>Responda as 5 questões para calcular sua nota final!</p>
+        <div id="container-perguntas"></div>
+        <button class="btn-add" style="font-size: 2.5vh; padding: 2vh;" onclick="calcularNotaFinal()">CONCLUIR E VER MINHA NOTA</button>
     </div>
 </div>
 
-<div id="tela-vitoria" class="tela-sucesso">
-    <h1 style="font-size: 3em;">🎉 PARABÉNS!</h1>
-    <h2 id="resumo-final" style="font-weight: normal; margin: 15px;"></h2>
-    <button onclick="location.reload()" style="background: var(--festa-primaria); padding: 15px 30px; font-size: 1em; border-radius: 30px;">Reiniciar</button>
+<div id="modal-resultado">
+    <div class="modal-content">
+        <h1 id="titulo-final">PARABÉNS!</h1>
+        <p>Sua nota final na atividade foi:</p>
+        <div class="nota-box" id="valor-nota">0</div>
+        <div id="relatorio-erros" style="text-align: left; background: #eee; padding: 1vh; border-radius: 10px; max-height: 15vh; overflow-y: auto; font-size: 1.2vh; margin-bottom: 2vh;"></div>
+        <button onclick="location.reload()" style="background: var(--festa-secundaria); padding: 1.5vh 3vh; width: 100%;">TENTAR NOVAMENTE</button>
+    </div>
 </div>
 
 <script>
@@ -185,6 +172,15 @@
 
     let convidados = [{ nome: "Pedro", gen: "m" }, { nome: "Julia", gen: "f" }];
     let testes = { ins: false, sub: false, rem: false };
+
+    // BANCO DE QUESTÕES
+    const perguntas = [
+        { q: "O QUE É UMA LISTA NA COMPUTAÇÃO?", o: ["UM ÚNICO NOME", "CONJUNTO DE INFORMAÇÕES ORGANIZADAS", "UM DESENHO", "UMA SENHA"], a: 1 },
+        { q: "O QUE ACONTECE COM O TAMANHO DE UMA LISTA AO ADICIONAR UM ITEM?", o: ["DIMINUI", "FICA IGUAL", "AUMENTA", "DESAPARECE"], a: 2 },
+        { q: "QUAL DESSES É UM EXEMPLO DE LISTA NO CELULAR?", o: ["BATERIA", "CONTATOS", "HORÁRIO", "PAPEL DE PAREDE"], a: 1 },
+        { q: "PODEMOS REMOVER ITENS DE UMA LISTA?", o: ["NUNCA", "SÓ SE A LISTA FOR GRANDE", "SIM, A QUALQUER MOMENTO", "SÓ UMA VEZ POR DIA"], a: 2 },
+        { q: "CADA ITEM NA LISTA POSSUI UMA POSIÇÃO CHAMADA:", o: ["NOME", "COR", "ÍNDICE OU SEQUÊNCIA", "TAMANHO"], a: 2 }
+    ];
 
     function renderizar() {
         const area = document.getElementById('lista-convidados');
@@ -200,50 +196,69 @@
                     </div>
                 </div>`;
         });
-
-        if(testes.ins) { document.getElementById('m-ins').innerText = "✅ Convidou"; document.getElementById('m-ins').classList.add('check'); }
-        if(testes.sub) { document.getElementById('m-sub').innerText = "✅ Trocou"; document.getElementById('m-sub').classList.add('check'); }
-        if(testes.rem) { document.getElementById('m-rem').innerText = "✅ Removeu"; document.getElementById('m-rem').classList.add('check'); }
-        if(testes.ins && testes.sub && testes.rem) document.getElementById('btn-concluir').style.display = 'block';
+        if(testes.ins) document.getElementById('m-ins').classList.add('check');
+        if(testes.sub) document.getElementById('m-sub').classList.add('check');
+        if(testes.rem) document.getElementById('m-rem').classList.add('check');
+        if(testes.ins && testes.sub && testes.rem) document.getElementById('btn-ir-questoes').style.display = 'block';
     }
 
     function processar(tipo) {
-        const f = document.getElementById('feedback');
-        if (tipo === 'inserir') {
-            const nome = document.getElementById('ins-nome').value;
-            const gen = document.getElementById('ins-gen').value;
+        const nomeIn = document.getElementById('ins-nome').value;
+        const subIn = document.getElementById('sub-nome').value;
+        if (tipo === 'inserir' && nomeIn) {
             let idx = parseInt(document.getElementById('ins-idx').value);
-            if(!nome) return;
             if(isNaN(idx)) idx = convidados.length;
-            convidados.splice(idx, 0, { nome: nome, gen: gen });
+            convidados.splice(idx, 0, { nome: nomeIn, gen: document.getElementById('ins-gen').value });
             testes.ins = true;
-            f.innerText = `🎈 ${nome} convidado(a)!`; f.style.color = "green";
-        } 
-        else if (tipo === 'substituir') {
+        } else if (tipo === 'substituir' && subIn) {
             const idx = parseInt(document.getElementById('sub-idx').value);
-            const nome = document.getElementById('sub-nome').value;
-            if(isNaN(idx) || idx >= convidados.length || !nome) { f.innerText = "⚠️ Índice inválido!"; f.style.color = "red"; return; }
-            convidados[idx].nome = nome;
-            testes.sub = true;
-            f.innerText = `🔄 Trocado para ${nome}!`; f.style.color = "blue";
-        }
-        else if (tipo === 'remover') {
+            if(idx < convidados.length) { convidados[idx].nome = subIn; testes.sub = true; }
+        } else if (tipo === 'remover') {
             const idx = parseInt(document.getElementById('rem-idx').value);
-            if(isNaN(idx) || idx >= convidados.length) { f.innerText = "⚠️ Índice vazio!"; f.style.color = "red"; return; }
-            convidados.splice(idx, 1);
-            testes.rem = true;
-            f.innerText = `❌ Removido com sucesso.`; f.style.color = "orange";
+            if(idx < convidados.length) { convidados.splice(idx, 1); testes.rem = true; }
         }
         renderizar();
         document.querySelectorAll('input').forEach(i => i.value = "");
     }
 
-    function abrirFesta() {
-        document.getElementById('resumo-final').innerText = `Lista final com ${convidados.length} convidados!`;
-        document.getElementById('tela-vitoria').style.display = 'flex';
+    function mudarParaQuestoes() {
+        document.getElementById('fase-pratica').style.display = 'none';
+        document.getElementById('fase-questoes').style.display = 'flex';
+        const container = document.getElementById('container-perguntas');
+        perguntas.forEach((p, idx) => {
+            let html = `<div class="questao-box"><p><b>${idx+1}. ${p.q}</b></p><div class="opcoes-box">`;
+            p.o.forEach((opt, oIdx) => {
+                html += `<button class="opcao-btn" onclick="selecionar(this, ${idx}, ${oIdx})">${opt}</button>`;
+            });
+            html += `</div></div>`;
+            container.innerHTML += html;
+        });
     }
+
+    let respostasAluno = [];
+    function selecionar(btn, qIdx, oIdx) {
+        const parent = btn.parentElement;
+        parent.querySelectorAll('.opcao-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        respostasAluno[qIdx] = oIdx;
+    }
+
+    function calcularNotaFinal() {
+        let acertos = 0;
+        let relatorio = "";
+        perguntas.forEach((p, i) => {
+            if(respostasAluno[i] === p.a) acertos++;
+            else relatorio += `Questão ${i+1}: Errou<br>`;
+        });
+
+        const notaTotal = (acertos / perguntas.length) * 10;
+        document.getElementById('valor-nota').innerText = notaTotal.toFixed(1);
+        document.getElementById('relatorio-erros').innerHTML = relatorio || "VOCÊ ACERTOU TODAS AS QUESTÕES!";
+        document.getElementById('titulo-final').innerText = notaTotal >= 7 ? "PARABÉNS!" : "QUASE LÁ!";
+        document.getElementById('modal-resultado').style.display = 'flex';
+    }
+
     renderizar();
 </script>
 </body>
 </html>
-
